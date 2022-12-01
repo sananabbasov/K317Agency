@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using WebApp.Data;
 using WebApp.Models;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -17,10 +19,21 @@ namespace WebApp.Controllers
 
         public IActionResult Index()
         {
+            var banner = _context.Banners.FirstOrDefault();
+            var services = _context.Services.ToList();
+            var portfolios = _context.Portfolios.Include(cat=>cat.Category).ToList();
+            var abouts = _context.Abouts.ToList();
+            var teams = _context.Teams.Include(x=>x.TeamsNetworks).ThenInclude(y=>y.SocialNetwork).ToList();
+            HomeVM vm = new()
+            {
+                Banner = banner,
+                Services = services,
+                Portfolios = portfolios,
+                Abouts = abouts,
+                Teams= teams,
+            };
 
-
-
-            return View();
+            return View(vm);
         }
 
         public IActionResult Privacy()
