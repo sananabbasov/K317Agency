@@ -17,6 +17,8 @@ namespace WebApp.Controllers
             _context = context;
         }
 
+
+        [HttpGet]
         public IActionResult Index()
         {
             var banner = _context.Banners.FirstOrDefault();
@@ -34,6 +36,16 @@ namespace WebApp.Controllers
             };
 
             return View(vm);
+        }
+
+
+
+        [HttpPost]
+        public IActionResult Contact(Contact contact)
+        {
+            _context.Contact.Add(contact);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Privacy()
